@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, Text, View, TextInput, TouchableOpacity, Image, BackHandler } from 'react-native';
+import { StyleSheet, Text, View, TextInput,Alert, TouchableOpacity, Image, BackHandler } from 'react-native';
 import Drawer from 'react-native-drawer'
 import MenuView from './MenuView';
 import {StackActions} from 'react-navigation';
@@ -25,9 +25,18 @@ export default class BaseDrawerUi extends React.Component {
       }
     
       handleBackPress = () => {
-        if (this.props.navigation.state.routeName == 'Dashboard') {
-            BackHandler.exitApp();
-            return false;
+        if (this.props.navigation.state.routeName == 'Dashboard' || this.props.navigation.state.routeName == 'Login') {
+            Alert.alert(
+            'Exit App',
+            'Do you want to exit?',
+            [
+            {text: 'No', onPress: () => console.log('Cancel Pressed'), style: 'cancel'},
+            {text: 'Yes', onPress: () => BackHandler.exitApp()},
+            ],
+            { cancelable: false });
+            return true;
+            // BackHandler.exitApp();
+            // return false;
         }
         const popAction = StackActions.pop({
             n: 1,

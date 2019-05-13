@@ -1,6 +1,6 @@
 import {AsyncStorage} from 'react-native';
 
-const baseUrl = "https://ap-vehicle-tracking.herokuapp.com";
+const baseUrl = "http://ap-vehicle-tracking.herokuapp.com";
 
 export const NetworkUtil = {
     users: baseUrl+"/user",
