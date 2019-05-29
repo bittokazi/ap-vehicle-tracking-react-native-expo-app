@@ -15,6 +15,7 @@ export default class ShowTasks extends React.Component {
             refreshing: false,
         }
         this.page = 0;
+        this.firstload = false;
     }
 
     _onRefresh() {
@@ -39,7 +40,10 @@ export default class ShowTasks extends React.Component {
               });
               await AsyncStorage.removeItem('updatetaskid');
             }
-            this.loadData();
+            if(!this.firstload) {
+                this.loadData();
+                this.firstload = true;
+            }
           } catch (error) {
               console.log(error);
           }
@@ -48,6 +52,7 @@ export default class ShowTasks extends React.Component {
     }
 
     loadData() {
+        console.log(this.page);
         NetworkUtil.authorizedRequest((header)=>{
             fetch(NetworkUtil.taskPage+this.page,{
                 method: 'GET',

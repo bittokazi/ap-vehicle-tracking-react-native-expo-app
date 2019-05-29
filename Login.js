@@ -1,11 +1,12 @@
 import React from 'react';
-import { StyleSheet, Text, View, TextInput, TouchableOpacity, Animated, ActivityIndicator } from 'react-native';
+import { StyleSheet, Text, Alert, BackHandler, View, TextInput, TouchableOpacity, Animated, ActivityIndicator } from 'react-native';
 import FadeInView from './FadeInView';
 import { TextField } from 'react-native-material-textfield';
 import { NetworkUtil } from './network/NetworkUtil';
 import {AsyncStorage} from 'react-native';
 import { Permissions, Notifications } from 'expo';
 import {NavigationEvents} from 'react-navigation';
+import {StackActions} from 'react-navigation';
 
 export default class Login extends React.Component {
 
@@ -27,6 +28,31 @@ export default class Login extends React.Component {
     }
   };
 
+  componentWillUnmount() {
+    BackHandler.removeEventListener('hardwareBackPress', this.handleBackPress);
+  }
+
+  handleBackPress = () => {
+    if (this.props.navigation.state.routeName == 'Dashboard' || this.props.navigation.state.routeName == 'Login') {
+        Alert.alert(
+        'Exit App',
+        'Do you want to exit?',
+        [
+        {text: 'No', onPress: () => console.log('Cancel Pressed'), style: 'cancel'},
+        {text: 'Yes', onPress: () => BackHandler.exitApp()},
+        ],
+        { cancelable: false });
+        return true;
+        // BackHandler.exitApp();
+        // return false;
+    }
+    const popAction = StackActions.pop({
+        n: 1,
+    });
+    this.props.navigation.dispatch(popAction)
+    return true;
+  }
+
   constructor(props) {
     super(props);
     this.state = { username: '',
@@ -41,6 +67,7 @@ export default class Login extends React.Component {
   }
 
   componentDidMount() {
+    BackHandler.addEventListener('hardwareBackPress', this.handleBackPress);
     this.setState({
       isLoading: true,
     });

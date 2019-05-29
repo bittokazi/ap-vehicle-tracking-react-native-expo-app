@@ -16,6 +16,7 @@ export default class Dashboard extends React.Component {
             userRole: 0
         }
         this.page = 0;
+        this.firstload = false;
     }
 
     _onRefresh() {
@@ -48,7 +49,10 @@ export default class Dashboard extends React.Component {
                   });
                   await AsyncStorage.removeItem('updatetaskid');
                 }
-                this.loadData();
+                if(!this.firstload) {
+                    this.loadData();
+                    this.firstload = true;
+                }
               } catch (error) {
                   console.log(error);
               }
