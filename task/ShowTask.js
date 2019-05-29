@@ -4,6 +4,7 @@ import BaseDrawerUi from './../BaseDrawerUi';
 import { NetworkUtil } from './../network/NetworkUtil';
 import {NavigationEvents} from 'react-navigation';
 import {AsyncStorage} from 'react-native';
+import { MapView } from "expo";
 
 export default class ShowTask extends React.Component {
 
@@ -271,6 +272,23 @@ export default class ShowTask extends React.Component {
                                 backgroundColor: '#e6ebf7',
                             }
                         }>
+
+                        <View style={styles.cardWrapper}>
+                            <View style={styles.contentWrapper}>
+                                <MapView
+                                    style={{
+                                        flex: 1,
+                                        height: 300
+                                    }}
+                                    initialRegion={{
+                                        latitude: 37.78825,
+                                        longitude: -122.4324,
+                                        latitudeDelta: 0.0922,
+                                        longitudeDelta: 0.0421
+                                    }}
+                                />
+                            </View>
+                        </View>
 
                     {this.userRole==1 && !this.isLoading &&
 
