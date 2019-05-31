@@ -180,13 +180,13 @@ export default class Login extends React.Component {
     const { onFocus, onBlur } = this.props;
     const { navigate } = this.props.navigation;
 
-    // if(this.state.isLoading){
-    //     return(
-    //         <View style={{flex: 1, padding: 20}}>
-    //             <ActivityIndicator style={{marginTop:50}}/>
-    //         </View>
-    //     )
-    // }
+    if(this.state.isLoading){
+        return(
+            <View style={{flex: 1, padding: 20}}>
+                <ActivityIndicator style={{marginTop:50}}/>
+            </View>
+        )
+    }
     return (
       <View style={{ flex: 1, flexDirection: "column" }}>
         <NavigationEvents onDidFocus={() => this.componentDidMount()} />

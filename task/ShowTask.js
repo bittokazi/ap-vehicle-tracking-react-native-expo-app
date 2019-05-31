@@ -377,7 +377,7 @@ export default class ShowTask extends React.Component {
             backgroundColor: "#e6ebf7"
           }}
         >
-          {!this.isLoading && (
+          {!this.isLoading && this.userRole == 1 && (
             <View style={styles.cardWrapper}>
               <View style={styles.contentWrapper}>
                 <MapView
@@ -448,6 +448,16 @@ export default class ShowTask extends React.Component {
                           this.state.dataSource.taskVehicleEntity
                             .registration_number
                         }
+                      </Text>
+                    </View>
+                    <View style={styles.contentColumnRight}>
+                      <Text style={styles.contentText}>
+                        Distance
+                      </Text>
+                      <Text style={styles.contentTextLower}>
+                        {
+                          this.state.dataSource.distance
+                        } KM
                       </Text>
                     </View>
                   </View>

@@ -9,6 +9,7 @@ export const NetworkUtil = {
     allCounters: baseUrl+"/counter",
     addVehicle: baseUrl+"/vehicle",
     allVehicles: baseUrl+"/vehicle",
+    vehicleWithTask: baseUrl+"/vehicle/and/task",
     task: baseUrl+"/task",
     taskPage: baseUrl+"/task/page/",
     singleTask: baseUrl+"/task/",

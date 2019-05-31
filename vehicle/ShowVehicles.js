@@ -22,6 +22,7 @@ export default class ShowVehicles extends React.Component {
             })
               .then((response) => response.json())
               .then((responseJson) => {
+                console.log(responseJson);
                 this.setState({
                   isLoading: false,
                   dataSource: responseJson,
@@ -95,6 +96,14 @@ export default class ShowVehicles extends React.Component {
                                             <View style={styles.contentColumnRight}>
                                                 <Text style={styles.contentTextLeft}>{item.title}</Text>
                                                 <Text style={styles.contentTextLeftLower}>{item.registration_number}</Text>
+                                            </View>
+                                            <Image
+                                                style={styles.truckImage}
+                                                source={require("./../assets/location.png")}
+                                            />
+                                            <View style={styles.contentColumnRight}>
+                                                <Text style={styles.contentTextLeft}>Distance</Text>
+                                                <Text style={styles.contentTextLeftLower}>{item.distance} KM</Text>
                                             </View>
                                         </View>
                                     </View>

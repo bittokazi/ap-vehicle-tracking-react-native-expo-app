@@ -21,7 +21,8 @@ export default class Dashboard extends React.Component {
 
     _onRefresh() {
         if(this.state.userRole==1) {
-            this.setState({refreshing: false});
+            this.setState({refreshing: true,dataSource:[]});
+            this.loadData();
         } else {
             this.setState({refreshing: true,dataSource:[]});
             this.page = 0;
@@ -64,7 +65,26 @@ export default class Dashboard extends React.Component {
         let _retrieveData = async () => {
             try {
               const value = await AsyncStorage.getItem('user');
-              if(JSON.parse(value).roleEntity.id==1) {}
+              if(JSON.parse(value).roleEntity.id==1) {
+                NetworkUtil.authorizedRequest((header)=>{
+                    fetch(NetworkUtil.vehicleWithTask,{
+                        method: 'GET',
+                        headers: header
+                    })
+                      .then((response) => response.json())
+                      .then((responseJson) => {
+                        this.setState({
+                          isLoading: false,
+                          refreshing: false,
+                          dataSource: responseJson,
+                        }, function(){
+                        });
+                      })
+                      .catch((error) =>{
+                        console.error(error);
+                    });
+                });
+              }
               else if(JSON.parse(value).userCounterEntity!=null) {
                 NetworkUtil.authorizedRequest((header)=>{
                     fetch(NetworkUtil.taskWithCounterId+JSON.parse(value).userCounterEntity.id+"/page/"+this.page,{
@@ -113,85 +133,156 @@ export default class Dashboard extends React.Component {
                         } 
                     style={{ backgroundColor: '#e6ebf7' }}>
 
-                    <FlatList
-                        data={this.state.dataSource}
-                        style={
-                            {
-                                backgroundColor: '#e6ebf7',
+                    {
+                        this.state.userRole==1 && 
+                        <FlatList
+                            data={this.state.dataSource}
+                            style={
+                                {
+                                    backgroundColor: '#e6ebf7',
+                                }
                             }
-                        }
-                        renderItem={
-                            ({item}) =>{
-                                item = item.taskEntity;
-                                return (
-                                <TouchableOpacity
-                                    onPress={() => navigate('ShowTask', { id: item.id })}>
-                                    <View style={styles.cardWrapper}>
-                                    <View style={styles.topBarWrapper}>
-                                        <View style={styles.topBarInfo}>
-                                            <View style={styles.topBarInfoRow}>
-                                                { 
-                                                    item.completed==1 && 
-                                                    <Text style={styles.styleCompleted}>Completed</Text>
-                                                }
-                                                { 
-                                                    item.completed!=1 && 
-                                                    <Text style={styles.styleOngoing}>Ongoing</Text>
-                                                }
+                            renderItem={
+                                ({item}) =>
+                                    <TouchableOpacity>
+                                        <View style={styles.cardWrapper}>
+                                        <View style={styles.topBarWrapper}>
+                                            <View style={styles.topBarInfo}>
+                                                <View style={styles.topBarInfoRow}>
+                                                    {
+                                                        item.onGoingTaskEntity.length>0 &&
+                                                        <Text style={styles.styleOngoing}>Ongoing</Text>
+                                                    }
+                                                    {
+                                                        item.onGoingTaskEntity.length==0 &&
+                                                        <Text style={styles.styleCompleted}>Idle</Text>
+                                                    }
+                                                </View>
                                             </View>
+                                            {/* <View style={styles.topBarInfo}>
+                                                <View style={styles.topBarInfoRow}>
+                                                    <Text style={styles.time}>{item.created_at}</Text>
+                                                    <Image
+                                                        style={styles.clockImage}
+                                                        source={require('./../assets/clock.png')}
+                                                    />
+                                                </View>
+                                            </View> */}
                                         </View>
-                                        <View style={styles.topBarInfo}>
-                                            <View style={styles.topBarInfoRow}>
-                                                <Text style={styles.time}>{item.created_at}</Text>
+                                        <View
+                                            style={{
+                                                borderBottomColor: 'black',
+                                                borderBottomWidth: 1,
+                                            }}
+                                            />
+                                        <View style={styles.contentWrapper}>
+                                            <View style={styles.contentSectionLeft}>
                                                 <Image
-                                                    style={styles.clockImage}
-                                                    source={require('./assets/clock.png')}
-                                                />
-                                            </View>
-                                        </View>
-                                    </View>
-                                    <View
-                                        style={{
-                                            borderBottomColor: 'black',
-                                            borderBottomWidth: 1,
-                                        }}
-                                        />
-                                    <View style={styles.contentWrapper}>
-                                        <View style={styles.contentSectionLeft}>
-                                            <Image
+                                                        style={styles.truckImage}
+                                                        source={require('./assets/truckImg.png')}
+                                                    />
+                                                <View style={styles.contentColumnRight}>
+                                                    <Text style={styles.contentTextLeft}>{item.title}</Text>
+                                                    <Text style={styles.contentTextLeftLower}>{item.registration_number}</Text>
+                                                </View>
+                                                <Image
                                                     style={styles.truckImage}
-                                                    source={require('./assets/truckImg.png')}
-                                                    onPress={()=>this.removeTrip(trip.id)}
+                                                    source={require("./assets/location.png")}
                                                 />
-                                            <View style={styles.contentColumn}>
-                                                <Text style={styles.contentTextLeft}>{item.counterStartEntity.title}</Text>
-                                                <Text style={styles.contentTextLeftLower}>{item.taskVehicleEntity.title}</Text>
+                                                <View style={styles.contentColumnRight}>
+                                                    <Text style={styles.contentTextLeft}>Distance</Text>
+                                                    <Text style={styles.contentTextLeftLower}>{item.distance} KM</Text>
+                                                </View>
                                             </View>
-                                        </View>
-                                        <View style={styles.contentSectionMiddle}>
-                                            <Image
-                                                    style={styles.imageMiddle}
-                                                    source={require('./assets/biDirection.png')}
-                                                    onPress={()=>this.removeTrip(trip.id)}
-                                                />
-                                        </View>
-                                        <View style={styles.contentSectionRight}>
-                                            <View style={styles.contentColumn}>
-                                                <Text style={styles.contentText}>{item.counterEndEntity.title}</Text>
-                                                <Text style={styles.contentTextLower}>{item.taskVehicleEntity.registration_number}</Text>
-                                            </View>
-                                            <Image
-                                                    style={styles.truckImageRight}
-                                                    source={require('./assets/truckImg.png')}
-                                                />
                                         </View>
                                     </View>
-                                </View>
-                                </TouchableOpacity>
-                                )
+                                    </TouchableOpacity>
                             }
-                        }
-                    />
+                        />
+                    }
+
+                    {
+                        this.state.userRole==2 &&
+                        <FlatList
+                            data={this.state.dataSource}
+                            style={
+                                {
+                                    backgroundColor: '#e6ebf7',
+                                }
+                            }
+                            renderItem={
+                                ({item}) =>{
+                                    item = item.taskEntity;
+                                    return (
+                                    <TouchableOpacity
+                                        onPress={() => navigate('ShowTask', { id: item.id })}>
+                                        <View style={styles.cardWrapper}>
+                                        <View style={styles.topBarWrapper}>
+                                            <View style={styles.topBarInfo}>
+                                                <View style={styles.topBarInfoRow}>
+                                                    { 
+                                                        item.completed==1 && 
+                                                        <Text style={styles.styleCompleted}>Completed</Text>
+                                                    }
+                                                    { 
+                                                        item.completed!=1 && 
+                                                        <Text style={styles.styleOngoing}>Ongoing</Text>
+                                                    }
+                                                </View>
+                                            </View>
+                                            <View style={styles.topBarInfo}>
+                                                <View style={styles.topBarInfoRow}>
+                                                    <Text style={styles.time}>{item.created_at}</Text>
+                                                    <Image
+                                                        style={styles.clockImage}
+                                                        source={require('./assets/clock.png')}
+                                                    />
+                                                </View>
+                                            </View>
+                                        </View>
+                                        <View
+                                            style={{
+                                                borderBottomColor: 'black',
+                                                borderBottomWidth: 1,
+                                            }}
+                                            />
+                                        <View style={styles.contentWrapper}>
+                                            <View style={styles.contentSectionLeft}>
+                                                <Image
+                                                        style={styles.truckImage}
+                                                        source={require('./assets/truckImg.png')}
+                                                        onPress={()=>this.removeTrip(trip.id)}
+                                                    />
+                                                <View style={styles.contentColumn}>
+                                                    <Text style={styles.contentTextLeft}>{item.counterStartEntity.title}</Text>
+                                                    <Text style={styles.contentTextLeftLower}>{item.taskVehicleEntity.title}</Text>
+                                                </View>
+                                            </View>
+                                            <View style={styles.contentSectionMiddle}>
+                                                <Image
+                                                        style={styles.imageMiddle}
+                                                        source={require('./assets/biDirection.png')}
+                                                        onPress={()=>this.removeTrip(trip.id)}
+                                                    />
+                                            </View>
+                                            <View style={styles.contentSectionRight}>
+                                                <View style={styles.contentColumn}>
+                                                    <Text style={styles.contentText}>{item.counterEndEntity.title}</Text>
+                                                    <Text style={styles.contentTextLower}>{item.taskVehicleEntity.registration_number}</Text>
+                                                </View>
+                                                <Image
+                                                        style={styles.truckImageRight}
+                                                        source={require('./assets/truckImg.png')}
+                                                    />
+                                            </View>
+                                        </View>
+                                    </View>
+                                    </TouchableOpacity>
+                                    )
+                                }
+                            }
+                        />
+                    }
 
                     {
                         this.state.userRole==2 && 
@@ -298,6 +389,12 @@ const styles = {
         flex: 1,
         flexDirection: 'column',
         marginTop: 5,
+    },
+    contentColumnRight: {
+        marginLeft: 35,
+        flex: 1,
+        flexDirection: "column",
+        marginTop: 5
     },
     styleCompleted: {
         backgroundColor: 'green',
