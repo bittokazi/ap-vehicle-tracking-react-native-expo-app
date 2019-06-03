@@ -11,6 +11,8 @@ import ShowVehicles from './vehicle/ShowVehicles';
 import AddTask from './task/AddTask';
 import ShowTasks from './task/ShowTasks';
 import ShowTask from './task/ShowTask';
+import AddDriver from './driver/AddDriver';
+import ShowDrivers from './driver/ShowDrivers';
 
 const MainNavigator = createStackNavigator(
   {
@@ -76,6 +78,18 @@ const MainNavigator = createStackNavigator(
     },
     ShowTask: {
       screen: ShowTask,
+      navigationOptions: {
+        header: null,
+      }
+    },
+    AddDriver: {
+      screen: AddDriver,
+      navigationOptions: {
+        header: null,
+      }
+    },
+    ShowDrivers: {
+      screen: ShowDrivers,
       navigationOptions: {
         header: null,
       }

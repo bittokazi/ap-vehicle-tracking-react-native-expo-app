@@ -9,7 +9,8 @@ import {
   ActivityIndicator,
   TouchableOpacity,
   Image,
-  ScrollView
+  ScrollView,
+  Linking
 } from "react-native";
 import BaseDrawerUi from "./../BaseDrawerUi";
 import { NetworkUtil } from "./../network/NetworkUtil";
@@ -450,6 +451,9 @@ export default class ShowTask extends React.Component {
                         }
                       </Text>
                     </View>
+                    
+                  </View>
+                  <View style={styles.contentSectionRight}>
                     <View style={styles.contentColumnRight}>
                       <Text style={styles.contentText}>
                         Distance
@@ -460,10 +464,53 @@ export default class ShowTask extends React.Component {
                         } KM
                       </Text>
                     </View>
+                    <Image
+                      style={styles.truckImageRight}
+                      source={require("./../assets/map.png")}
+                    />
                   </View>
                 </View>
               </View>
             )}
+
+          {this.userRole == 1 && this.state.dataSource.taskDriverEntity !=null &&
+            !this.isLoading && (
+              <View style={styles.cardWrapper}>
+                <View style={styles.topBarWrapper}>
+                    <View style={styles.topBarInfo}>
+                        <View style={styles.topBarInfoRow}>
+                            <Text style={styles.driverNumber}>{this.state.dataSource.taskDriverEntity.mobile_number}</Text>
+                        </View>
+                    </View>
+                </View>
+                <View
+                    style={{
+                        borderBottomColor: 'black',
+                        borderBottomWidth: 1,
+                    }}
+                    />
+                <View style={styles.contentWrapper}>
+                    <View style={styles.contentSectionLeft}>
+                        <Image
+                                style={styles.truckImage}
+                                source={require('./../assets/users.png')}
+                            />
+                        <View style={styles.contentColumnRight}>
+                            <Text style={styles.contentTextLower}>{this.state.dataSource.taskDriverEntity.name}</Text>
+                            <Text style={styles.contentTextLower}>{this.state.dataSource.taskDriverEntity.driving_license}</Text>
+                        </View>
+                    </View>
+                    <View style={styles.contentSectionRightDriverCall}>
+                        <TouchableOpacity onPress={()=> Linking.openURL(`tel:${this.state.dataSource.taskDriverEntity.mobile_number}`)}>
+                            <Image
+                                    style={styles.truckImageRight}
+                                    source={require('./../assets/call.png')}
+                                />
+                        </TouchableOpacity>
+                    </View>
+                </View>
+            </View>
+          )}
 
           {this.userRole == 1 &&
             !this.isLoading && (
@@ -890,6 +937,11 @@ const styles = {
     flex: 2,
     flexDirection: "row"
   },
+  contentSectionRightDriverCall: {
+    flex: 1,
+    flexDirection: "row",
+    justifyContent: 'flex-end'
+  },
   imageMiddle: {
     height: 45,
     width: 45,
@@ -942,6 +994,14 @@ const styles = {
     padding: 4,
     color: "white",
     fontSize: 12,
+    borderRadius: 4,
+    marginBottom: 10
+  },
+  driverNumber: {
+    backgroundColor: "#0077b7",
+    padding: 4,
+    color: "white",
+    fontSize: 14,
     borderRadius: 4,
     marginBottom: 10
   },

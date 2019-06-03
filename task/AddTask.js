@@ -12,6 +12,7 @@ export default class AddTask extends React.Component {
             isLoading: false,
             counters: [],
             vehicles: [],
+            drivers: [],
             message: false,
             success: false,
             tripEntity: [],
@@ -21,6 +22,7 @@ export default class AddTask extends React.Component {
                 end_counter: '',
                 description: '',
                 vehicle_id: '',
+                driver_id: '',
                 description: '',
                 tripEntity: [],
             }
@@ -59,9 +61,29 @@ export default class AddTask extends React.Component {
                 vehicles: responseJson,
                 }, function(){
                 });
-                this.loadCounters();
+                this.loadDrivers();
             })
             .catch((error) =>{
+                console.error(error);
+            });
+        });
+    }
+
+    loadDrivers() {
+        NetworkUtil.authorizedRequest((header)=>{
+            fetch(NetworkUtil.driver,{
+                method: 'GET',
+                headers: header
+            })
+              .then((response) => response.json())
+              .then((responseJson) => {
+                this.setState({
+                drivers: responseJson,
+                }, function(){
+                });
+                this.loadCounters();
+              })
+              .catch((error) =>{
                 console.error(error);
             });
         });
@@ -280,6 +302,25 @@ export default class AddTask extends React.Component {
                                 {
                                     this.state.vehicles.map( (v)=>{
                                         return <Picker.Item label={v.title} value={v.id} />
+                                    })
+                                }
+                        </Picker>
+                    </View>
+
+                    <View style={styles.textfieldWrapper}>
+                        <Picker
+                            selectedValue={this.state.body.driver_id}
+                            style={{}}
+                            onValueChange={ (itemValue, itemIndexnter) => {
+                                this.state.tripEntity = [];
+                                this.state.body.tripEntity = [];
+                                let prop = this.state.body;
+                                prop.driver_id = itemValue;
+                                this.setState({prop})} }>
+                                <Picker.Item label="Select Driver" value="" />
+                                {
+                                    this.state.drivers.map( (v)=>{
+                                        return <Picker.Item label={v.name} value={v.id} />
                                     })
                                 }
                         </Picker>

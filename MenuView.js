@@ -31,10 +31,12 @@ export default class MenuView extends React.Component {
                         {key: 'Show Counters', image: require('./assets/showCounter.png'), intent: 'ShowCounters'},
                         {key: 'Show Users', image: require('./assets/users.png'), intent: 'ShowUsers'},
                         {key: 'Show Tasks', image: require('./assets/showTask.png'), intent: 'ShowTasks'},
+                        {key: 'Show Drivers', image: require('./assets/users.png'), intent: 'ShowDrivers'},
                         {key: 'Add Vehicle', image: require('./assets/addTruck.png'), intent: 'AddVehicle'},
                         {key: 'Add Counter', image: require('./assets/counter.png'), intent: 'AddCounter'},
                         {key: 'Add User', image: require('./assets/addUser.png'), intent: "AddUser"},
                         {key: 'Add Task', image: require('./assets/addTask.png'), intent: 'AddTask'},
+                        {key: 'Add Driver', image: require('./assets/addUser.png'), intent: 'AddDriver'},
                     ]
                 });
               } else if(JSON.parse(value).roleEntity.id==2) {

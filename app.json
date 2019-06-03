@@ -26,10 +26,7 @@
       "supportsTablet": true
     },
     "android": {
-      "package": "com.bitto.kazi.apvehicle.tracker",
-      "config": {
-        "googleMaps": { "apiKey": "AIzaSyAKHP7ldSVRMVy16w-f1gr0E8jPNtY5DHI" }   
-      }
+      "package": "com.bitto.kazi.apvehicle.tracker"
     },
     "notification": {
       "icon": "./assets/truckImg.png"

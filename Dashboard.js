@@ -155,7 +155,7 @@ export default class Dashboard extends React.Component {
                                                     }
                                                     {
                                                         item.onGoingTaskEntity.length==0 &&
-                                                        <Text style={styles.styleCompleted}>Idle</Text>
+                                                        <Text style={styles.styleCompleted}>No Trip</Text>
                                                     }
                                                 </View>
                                             </View>
@@ -182,17 +182,25 @@ export default class Dashboard extends React.Component {
                                                         source={require('./assets/truckImg.png')}
                                                     />
                                                 <View style={styles.contentColumnRight}>
-                                                    <Text style={styles.contentTextLeft}>{item.title}</Text>
-                                                    <Text style={styles.contentTextLeftLower}>{item.registration_number}</Text>
+                                                    <Text style={styles.contentText}>{item.title}</Text>
+                                                    <Text style={styles.contentTextLower}>{item.registration_number}</Text>
+                                                </View>
+                                            </View>
+                                            <View style={styles.contentSectionRight}>
+                                                <View style={styles.contentColumnRight}>
+                                                <Text style={styles.contentText}>
+                                                    Distance
+                                                </Text>
+                                                <Text style={styles.contentTextLower}>
+                                                    {
+                                                    item.distance
+                                                    } KM
+                                                </Text>
                                                 </View>
                                                 <Image
-                                                    style={styles.truckImage}
-                                                    source={require("./assets/location.png")}
+                                                style={styles.truckImageRight}
+                                                source={require("./assets/map.png")}
                                                 />
-                                                <View style={styles.contentColumnRight}>
-                                                    <Text style={styles.contentTextLeft}>Distance</Text>
-                                                    <Text style={styles.contentTextLeftLower}>{item.distance} KM</Text>
-                                                </View>
                                             </View>
                                         </View>
                                     </View>

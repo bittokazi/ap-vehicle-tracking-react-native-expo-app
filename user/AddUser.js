@@ -164,6 +164,7 @@ export default class AddUser extends React.Component {
                     <View style={styles.textfieldWrapper}>
                         <TextField
                             label='Password'
+                            secureTextEntry={true}
                             value={this.state.body.password}
                             onChangeText={ (password) => {
                                 let body = this.state.body;

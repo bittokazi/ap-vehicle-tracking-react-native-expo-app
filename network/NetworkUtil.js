@@ -18,6 +18,7 @@ export const NetworkUtil = {
     addTrip: baseUrl+"/task/add/trip/",
     taskWithCounterId: baseUrl+"/task/counter/",
     login: baseUrl+"/login",
+    driver: baseUrl+"/driver",
     authorizedRequest: (callback)=> {
         let _retrieveData = async () => {
             try {
